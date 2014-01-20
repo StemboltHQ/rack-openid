@@ -105,6 +105,12 @@ module Rack
       end
     end
 
+    def self.sanitize_request!(request)
+      ['openid.sig', 'openid.response_nonce'].each do |param|
+        (request.params[param] || '').gsub!(' ', '+')
+      end
+    end
+
     private
 
     def sanitize_params!(params)
@@ -303,7 +309,7 @@ module Rack
     def timeout_protection_from_identity_server
       yield
     rescue Timeout::Error
-      TimeoutResponse.new
+e     TimeoutResponse.new
     end
   end
 end
